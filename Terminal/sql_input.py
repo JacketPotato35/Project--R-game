@@ -4,7 +4,6 @@ import sqlite3
 connection_obj=sqlite3.connect("QUESTION.db")
 cursor_obj=connection_obj.cursor()
 
-
 function_name="modulus"
 for i in range(1,25):
     a=random.randint(1,20)
@@ -16,8 +15,8 @@ for i in range(1,25):
     conditions=[b,"%"]
     print(comment,answer)
     sql_code=f"""
-    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer)
-    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}");
+    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer, code_topic)
+    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}", "operators");
     """
     cursor_obj.execute(sql_code)
     connection_obj.commit()
@@ -32,12 +31,12 @@ for i in range(1,25):
     conditions=[b,"**"]
     print(comment,answer)
     sql_code=f"""
-    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer)
-    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}");
+    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer, code_topic)
+    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}", "operators");
     """
     cursor_obj.execute(sql_code)
     connection_obj.commit()
-function_name="floor division"
+function_name="floor_division"
 for i in range(1,25):
     a=random.randint(1,50)
     b=random.randint(1,10)
@@ -48,8 +47,8 @@ for i in range(1,25):
     conditions=[b,"//"]
     print(comment,answer)
     sql_code=f"""
-    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer)
-    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}");
+    INSERT INTO question ( function_name, comments, pre_written_code, end_written_code, conditions, answer, code_topic)
+    VALUES ("{function_name}", "{comment}", "{pre_written_code}", "{end_written_code}", "{conditions}", "{answer}", "operators");
     """
     cursor_obj.execute(sql_code)
     connection_obj.commit()

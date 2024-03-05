@@ -19,7 +19,8 @@ else:
                 pre_written_code CHARRARRAY,
                 end_written_code CHARRARRAY,
                 conditions CHARRARRAY, 
-                answer VARCHAR(64) NOT NULL
+                answer VARCHAR(64) NOT NULL,
+                code_topic VARCHAR(64) NOT NULL
             ); """
     
     cursor_obj.execute(table)

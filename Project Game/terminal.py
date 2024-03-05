@@ -44,7 +44,8 @@ class Question():
     pre_written_code: list
     end_written_code : list
     conditions : list 
-    answer : str    
+    answer : str
+    code_topic : str
 
 
 class Terminal():
@@ -58,13 +59,14 @@ class Terminal():
         pygame.display.set_caption('hackbox')
         self.text=Text()
         question_parts=self.get_random_from_table()
-        self.question=Question(question_parts[0],question_parts[1],question_parts[2],question_parts[3],question_parts[4],question_parts[5])
+        self.question=Question(question_parts[0],question_parts[1],question_parts[2],question_parts[3],question_parts[4],question_parts[5],question_parts[6])
         self.user_text=[self.question_2_array()]
         self.start_limit=2+len(self.str_2_list(self.question.pre_written_code))
         self.end_limit=1+len(self.str_2_list(self.question.end_written_code))
         self.user_row=self.start_limit
         self.user_text=[self.question_2_array()]
         self.user_text=self.user_text[0]
+        self.tries=3
 
     def convert_2_string(self, question: Question):
         written_code=self.user_text[2:-1]
@@ -156,7 +158,7 @@ class Terminal():
         WHERE id={random_num}
         """)
         a=cursor_obj.fetchall()
-        question=a[0][1],a[0][2],a[0][3],a[0][4],a[0][5],a[0][6]
+        question=a[0][1],a[0][2],a[0][3],a[0][4],a[0][5],a[0][6],a[0][7]
         return question
 
     def clear(self):
@@ -192,7 +194,8 @@ class Terminal():
                             #run the code
                         elif button_press==pygame.K_ESCAPE:
                             if self.check_process()==True:
-                                return False
+                                return "terminal_success"
+                            self.tries-=1
                             #clear the code
                         elif button_press==pygame.K_HASH:
                             self.clear()
@@ -201,8 +204,12 @@ class Terminal():
                             self.user_text[self.user_row]+=button_press
     def run(self, display):
         while True:
-            if self.check_inputs()==False:
-                break
+            if self.check_inputs()=="terminal_success":
+                return "terminal_success"
+            if self.tries<1:
+                return self.question.code_topic
             self.text.renderall(display,20,(255,255,255),self.user_text,self.user_row)
+            self.text.render(display,f"tries:{self.tries}",self.screen_width-100,self.screen_height-40,20,(255,255,255))
+            self.text.render(display,f"press esc to run",self.screen_width-200,self.screen_height-70,20,(255,255,255))
             pygame.display.update()
             self.clock.tick(60)

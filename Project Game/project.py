@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-from test2 import Terminal 
+from terminal import Terminal 
 from pygame.locals import QUIT
 from dataclasses import dataclass
 from player import Gunner,Archer,Knight,Empty_player
@@ -57,6 +57,19 @@ arr[round(cols/2)-1][round(rows/2)-1]="s"
 current_space=[3,3]
 map=Map(arr,current_space)
 room_options=["e","s","b","n"]
+user_progress=0
+f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\highest_score.txt","r")
+highest_score=int(f.readlines(0)[0])
+f.close()
+f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\user_stuggle_l","r")
+user_struggle_l=[]
+topic_list=(f.readlines(0))
+for topic in topic_list:
+    stripped_topic=topic.rstrip("\n")
+    user_struggle_l.append(stripped_topic)
+
+
+f.close()
 
 roomy = 8
 for y in room:
@@ -198,12 +211,10 @@ def load_new(ctime,current_space):
 def terminal():
     screenchange(display)
     terminal=Terminal()
-    terminal.run(display)
+    result=terminal.run(display)
     screenchange(display)
-    choice1=get_random_buff()
-    choice2=get_random_buff()
-    choice3=get_random_buff()
-    return "buff_choose"
+    print(result)
+    return result
 
 
 def buff_choose(buffs_chosen):
@@ -327,13 +338,20 @@ def game_loop(current_space):
     else:
         if len(enemy_group.sprites())==0:
             return "next level"
-def menu(player):
+def menu(player,user_struggle_l):
     text.render(display, "press 1 to play as gunner", screen_width/
                 2, screen_height/2, 20, (255, 255, 255))
     text.render(display, "press 2 to play as archer", screen_width/
                 2, screen_height/2+50, 20, (255, 255, 255))
     text.render(display, "press 3 to play as knight", screen_width/
                 2, screen_height/2+100, 20, (255, 255, 255))
+    x=300
+    y=40
+    text.render(display,"topics which need reivsing:",x,y,20,(255,255,255))
+    for i in user_struggle_l:
+        y+=30
+        text.render(display,f"{i}",x,y,15,(255,255,255))
+    text.render(display,f"highest score:{highest_score}",screen_width-250,40,16,(255,255,255))
     if button_press == pygame.K_1:
         game_loop(current_space)
         return "gunner"
@@ -343,6 +361,7 @@ def menu(player):
     if button_press== pygame.K_3:
         game_loop(current_space)
         return "knight"
+
 
 def wait_level(button_press,current_space,arr):
     draw_surface.fill((160, 160, 160))
@@ -366,13 +385,6 @@ def wait_level(button_press,current_space,arr):
         if lsquare.player_in(player,display,button_press):
             current_space[0]+=lsquare.direction[1]
             current_space[1]+=lsquare.direction[0]
-            #print(f"""{temp_arr[current_space[0]+1][current_space[1]]}\n
-          #{arr[current_space[0]-1][current_space[1]]}\n
-          #{arr[current_space[0]][current_space[1]+1]}\n
-          #{arr[current_space[0]][current_space[1]-1]}""")
-            #for i in temp_arr: 
-            #    print (i)
-            #print("///////")
             for i in lsquareg:
                 i.kill()
             map.update(arr,current_space)
@@ -417,11 +429,9 @@ def next_floor():
     arr[round(cols/2)-1][round(rows/2)-1]="e"
     return arr
 
+
 arr=make_array(15,arr)
 arr[round(cols/2)-1][round(rows/2)-1]="e"
-for i in arr:
-    print(i)
-print("///////")
 while True:
     current_time = pygame.time.get_ticks()
     for event in pygame.event.get():
@@ -448,13 +458,13 @@ while True:
                     bullet_group.add(player.create_arrow(screen_height/2,screen_width/2))
                     
     if state == State.menu:
-        if menu(player)=="gunner":
+        if menu(player,user_struggle_l)=="gunner":
             player=Gunner()
             state = State.new_load
-        elif menu(player)=="archer":
+        elif menu(player,user_struggle_l)=="archer":
             player=Archer()
             state = State.new_load
-        elif menu(player)=="knight":
+        elif menu(player,user_struggle_l)=="knight":
             player=Knight()
             state=State.new_load
     elif state == State.game: 
@@ -476,12 +486,20 @@ while True:
             if arr[current_space[1]%7][(current_space[0]-1)%7] in room_options:
                 level_square= Level_square(-100,0,[0,-1])
                 lsquareg.add(level_square)
-            for i in arr:
-                print(i)
-            print("///////////")
-        if game_loop_return== "buff_choose":
+        if game_loop_return== "terminal_success":
             state=State.buff_choose
             buffs_chosen=[get_random_buff(),get_random_buff(),get_random_buff()]
+        elif game_loop_return in ["operators"]:
+            user_struggle_l.append(game_loop_return)
+            user_struggle_l=list(set(user_struggle_l))
+            print(user_struggle_l)
+            f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\user_stuggle_l","w")
+            for word in user_struggle_l:
+                print(word)
+                f.write(word)
+                f.write("\n")
+            f.close()
+
         if game_loop_return=="next floor":
             state=State.next_floor
             player.score+=1
@@ -503,6 +521,11 @@ while True:
         arr=next_floor()
         current_space=[3,3]
         map.update(arr,current_space)
+        user_progress+=1
+        if player.score>highest_score:
+            highest_score=player.score
+            f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\highest_score.txt","w")
+            f.writelines(f"{highest_score}")
         state=State.game
     pygame.display.update()
     clock.tick(60)

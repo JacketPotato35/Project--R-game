@@ -7,6 +7,37 @@ from subprocess import run
 from Terminal.exec import exec_with_return 
 import sys
 import random
+########################### dont read this
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -133,8 +164,7 @@ class Terminal():
                             self.user_text[self.user_row]+="    "
                         elif button_press==pygame.K_ESCAPE:
                             self.text.render(display,str(self.question.execute(self.user_text)),screen_width/8,screen_height/7*6,20, (255,0,0))
-                            self.check=self.question.execute(self.user_text)
-                            if self.check=="check passed":
+                            if self.question.execute(self.user_text)=="check passed":
                                 self.question.reset(self.question_array[random.randint(0,4)])
                             self.clear()
                         elif button_press==pygame.K_HASH:
