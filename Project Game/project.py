@@ -58,10 +58,10 @@ current_space=[3,3]
 map=Map(arr,current_space)
 room_options=["e","s","b","n"]
 user_progress=0
-f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\highest_score.txt","r")
+f=open(r"Project Game\highest_score.txt","r")
 highest_score=int(f.readlines(0)[0])
 f.close()
-f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\user_stuggle_l","r")
+f=open(r"Project Game\user_struggle_l","r")
 user_struggle_l=[]
 topic_list=(f.readlines(0))
 for topic in topic_list:
@@ -493,7 +493,7 @@ while True:
             user_struggle_l.append(game_loop_return)
             user_struggle_l=list(set(user_struggle_l))
             print(user_struggle_l)
-            f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\user_stuggle_l","w")
+            f=open(r"Project Game\user_struggle_l","w")
             for word in user_struggle_l:
                 print(word)
                 f.write(word)
@@ -524,7 +524,7 @@ while True:
         user_progress+=1
         if player.score>highest_score:
             highest_score=player.score
-            f=open(r"C:\Users\liter\OneDrive\Documents\Repo\Project-R-Game\Project--R-game\Project Game\highest_score.txt","w")
+            f=open(r"Project Game\highest_score.txt","w")
             f.writelines(f"{highest_score}")
         state=State.game
     pygame.display.update()
