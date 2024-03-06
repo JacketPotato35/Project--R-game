@@ -163,9 +163,9 @@ class Gunner(BasePlayer):
         self.damage=5
         self.bullet_speed=6
         self.fire_rate=800
+        
     def update(self, space, current_time, draw_surface):
         super().update(space, current_time, draw_surface)
-        self.reload_text(draw_surface,current_time)
 
     def create_bullet(self, screen_height, screen_width):
         return (Bullet(self.bullet_xy[0], self.bullet_xy[1], screen_height, screen_width, self.bullet_xy,self.bullet_speed,self.knockback,self.damage))
@@ -191,12 +191,11 @@ class Gunner(BasePlayer):
             if self.reload_time+2200 < ctime: 
                 self.reloading = False
                 self.bullet_counter = 6
-        text = Text()
-        if self.reloading == True:
-            text.render(display, "reloading", self.rect.x+(screen_width/2), self.rect.y+100, 20, (45, 50, 30))
-        elif self.reloading == False:
-            text.render(display, ("bullets: "+str(self.bullet_counter)),
-                        self.rect.x+(screen_width/2), self.rect.y+100, 20, (45, 50, 30))
+        text=Text()
+        if self.reloading==True:
+            text.render(display,f"reloading",screen_width ,30,15,(10,10,10))
+        else:
+            text.render(display,f"bullets{self.bullet_counter}",screen_width,30,15,(10,10,10))
 
     def reload(self,display,ctime):
         screen_width, screen_height = display.get_size()
@@ -208,12 +207,6 @@ class Gunner(BasePlayer):
             if self.reload_time+2200 < ctime: 
                 self.reloading = False
                 self.bullet_counter = 6
-        text = Text()
-        if self.reloading == True:
-            text.render(display, "reloading", self.rect.x+(screen_width/2), self.rect.y+100, 20, (45, 50, 30))
-        elif self.reloading == False:
-            text.render(display, ("bullets: "+str(self.bullet_counter)),
-                        screen_width/2, screen_height/2+40, 20, (45, 50, 30)) 
 
 class Empty_player(BasePlayer):
     def __init__(self):

@@ -338,6 +338,9 @@ def game_loop(current_space):
     else:
         if len(enemy_group.sprites())==0:
             return "next level"
+    if player.player_class=="gunner":
+        player.reload_text(display,current_time)
+
 def menu(player,user_struggle_l):
     text.render(display, "press 1 to play as gunner", screen_width/
                 2, screen_height/2, 20, (255, 255, 255))
@@ -489,7 +492,8 @@ while True:
         if game_loop_return== "terminal_success":
             state=State.buff_choose
             buffs_chosen=[get_random_buff(),get_random_buff(),get_random_buff()]
-        elif game_loop_return in ["operators"]:
+            user_struggle_l
+        elif game_loop_return in ["operators","iteration"]:
             user_struggle_l.append(game_loop_return)
             user_struggle_l=list(set(user_struggle_l))
             print(user_struggle_l)
