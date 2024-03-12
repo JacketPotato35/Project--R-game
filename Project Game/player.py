@@ -180,9 +180,10 @@ class Gunner(BasePlayer):
             else:
                 return False
 
-    def reload_text(self, display : pygame.display, ctime):
+
+    def reload(self,display,ctime,button_press):
         screen_width, screen_height = display.get_size()
-        if self.bullet_counter == 0:
+        if button_press==pygame.K_r:
             if self.reloading == False:
                 self.reload_time = ctime
             self.reloading = True
@@ -196,17 +197,6 @@ class Gunner(BasePlayer):
             text.render(display,f"reloading",screen_width ,30,15,(10,10,10))
         else:
             text.render(display,f"bullets{self.bullet_counter}",screen_width,30,15,(10,10,10))
-
-    def reload(self,display,ctime):
-        screen_width, screen_height = display.get_size()
-        if self.reloading == False:
-            self.reload_time = ctime
-        self.reloading = True
-
-        if self.reloading:
-            if self.reload_time+2200 < ctime: 
-                self.reloading = False
-                self.bullet_counter = 6
 
 class Empty_player(BasePlayer):
     def __init__(self):
@@ -248,7 +238,6 @@ class Knight(BasePlayer):
             self.swing_timer=1
         self.draw_marker(draw_surface,self.swing_timer,self.swing_timer_max)
         
-
     class Marker(pygame.sprite.Sprite):
         def __init__(self,mouse_pos,screen_width,screen_height,length,swing_dis):
             pygame.sprite.Sprite.__init__(self)

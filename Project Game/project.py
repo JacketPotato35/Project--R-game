@@ -266,8 +266,6 @@ def screenchange(display_return : pygame.surface):
 
 def game_loop(current_space):
     draw_surface.fill((160, 160, 160))
-    if button_press==pygame.K_r:
-        player.reload(display,current_time)
     if arr[current_space[1]][current_space[0]]=="s":
         for i in bullet_group:
             for x in enemy_group:
@@ -339,7 +337,7 @@ def game_loop(current_space):
         if len(enemy_group.sprites())==0:
             return "next level"
     if player.player_class=="gunner":
-        player.reload_text(display,current_time)
+        player.reload(display,current_time,button_press)
 
 def menu(player,user_struggle_l):
     text.render(display, "press 1 to play as gunner", screen_width/
