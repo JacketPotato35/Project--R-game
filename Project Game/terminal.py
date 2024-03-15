@@ -96,6 +96,7 @@ class Terminal():
         self.text.renderall(self.display,20,(255,255,255),self.user_text,self.user_row)
         pygame.display.update()
         pygame.time.delay(800)
+        #checks if the answer is correct
         if a[0]==True:
             colour=(0,250,0)
             text="correct"   
@@ -106,6 +107,7 @@ class Terminal():
         self.text.renderall(self.display,20,(255,255,255),self.user_text,self.user_row)
         pygame.display.update()
         pygame.time.delay(800)
+        #checks if passes certain check conditions
         if a[1]==True:
             colour=(0,250,0)
             text="check passed"
@@ -115,8 +117,10 @@ class Terminal():
         self.text.render(self.display,f"condition check: {text}",30,self.screen_height/3*2+font_size*2,font_size,colour)
         pygame.display.update()
         pygame.time.delay(800)
+        #returns successfull if it has passed both checks
         if a[0]==True and a[1]==True:
             return True
+        
     def return_execute_output(self):   
         code_str=self.convert_2_string(self.question)
         try:

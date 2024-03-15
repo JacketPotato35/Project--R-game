@@ -183,7 +183,6 @@ def draw_to_surface():
 def load_new(ctime,current_space):
     player.score=0
     player.rect.center=(935,810)
-    player.lives=3
     player.bullet_counter=6
 
     enemy_group.empty()
@@ -266,7 +265,9 @@ def screenchange(display_return : pygame.surface):
 
 def game_loop(current_space):
     draw_surface.fill((160, 160, 160))
+    #if the room is a enemy room
     if arr[current_space[1]][current_space[0]]=="s":
+        #check if bullets collide with enemies
         for i in bullet_group:
             for x in enemy_group:
                 if x.check_bullet_collision(i):
@@ -277,6 +278,7 @@ def game_loop(current_space):
                         if x.hacked==True:
                             return terminal()
                         player.gold+=20
+        #knight marker collision check with enemies
         if player.player_class=="knight":
             for x in enemy_group:
                 for y in player.marker_group:
@@ -288,6 +290,7 @@ def game_loop(current_space):
                         if x.hacked==True:
                             return terminal()
                         player.gold+=20
+        #check for player collision with enemies
         for i in enemy_group:
             i.update(player, current_time, space)
             i.draw_to_surface(draw_surface)
@@ -302,6 +305,7 @@ def game_loop(current_space):
             if type(i).__name__=="Renemy":
                 if i.enemyb_timer(current_time):
                     enemy_bullets.add(i.create_ebullet(player))
+    #if the room is a shop room, draw shop
     if arr[current_space[1]][current_space[0]]=="b":
         for i in shop_group:
             i.draw_to_surface(draw_surface)
@@ -317,7 +321,8 @@ def game_loop(current_space):
     text.render(display, ("score:"+str(player.score)),
                 screen_width/12*11.2,15, 30, (30, 30, 30))
     text.render(display, ("gold:"+str(player.gold)),
-                screen_width/12*11.2,60, 30, (30, 30, 30))            
+                screen_width/12*11.2,60, 30, (30, 30, 30))  
+    #if room is shop, checking for door and random buff          
     if arr[current_space[1]][current_space[0]]=="b":
         for i in shop_group:
             if i.player_in_items(player,display,button_press,player.gold)=="buff":
@@ -327,13 +332,14 @@ def game_loop(current_space):
                 
             if i.player_in_door(player,display,button_press)==True:
                 shop_group.empty()
-                return "next level"
+                return "next level"     
     elif arr[current_space[1]][current_space[0]]=="n":
         for i in next_level_squares:
             if i.player_in(player,display,button_press)==True:
                 next_level_squares.empty()
                 return"next floor"
     else:
+        #if no enemies, room is over
         if len(enemy_group.sprites())==0:
             return "next level"
     if player.player_class=="gunner":
@@ -471,6 +477,14 @@ while True:
     elif state == State.game: 
         game_loop_return=game_loop(current_space)
         if game_loop_return== "dead":
+            arr=next_floor()
+            current_space=[3,3]
+            map.update(arr,current_space)
+            user_progress+=1
+            if player.score>highest_score:
+                highest_score=player.score
+                f=open(r"Project Game\highest_score.txt","w")
+                f.writelines(f"{highest_score}")
             state = State.menu
         if game_loop_return== "next level":
             arr[current_space[1]][current_space[0]]="e"
@@ -487,7 +501,7 @@ while True:
             if arr[current_space[1]%7][(current_space[0]-1)%7] in room_options:
                 level_square= Level_square(-100,0,[0,-1])
                 lsquareg.add(level_square)
-        if game_loop_return== "terminal_success":
+        if game_loop_return== "terminal_success" or game_loop_return=="buff_choose":
             state=State.buff_choose
             buffs_chosen=[get_random_buff(),get_random_buff(),get_random_buff()]
             user_struggle_l

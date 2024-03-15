@@ -12,7 +12,7 @@ class BasePlayer(pygame.sprite.Sprite):
         self.bullet_xy = self.rect.center
         self.dash_cd = 0
         self.dash_time = 0
-        self.hp_bar=self.Hp_bar(100000)
+        self.hp_bar=self.Hp_bar(100)
         self.livecd = -1000
         self.blink_duration = 0
         self.blink_time = -100
@@ -213,7 +213,7 @@ class Knight(BasePlayer):
         self.swing_current_cooldown=self.swing_timer_max
         self.swing_cooldown=self.swing_timer_max
         self.knockback=10
-        self.damage=100
+        self.damage=4
         self.sword_length=20
         self.swing_distance=1.2
     def draw_marker(self,draw_surface,swing_timer,swing_timer_max):

@@ -111,3 +111,5 @@ def if_statement():
         """
         cursor_obj.execute(sql_code)
         connection_obj.commit()
+operator_questions()
+iteration_questions()
